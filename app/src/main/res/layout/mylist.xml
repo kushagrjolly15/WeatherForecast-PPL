@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+    <TextView
+        android:id="@+id/Itemname1"
+        android:layout_width="190dp"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:paddingTop="5dp"/>
+    <TextView
+        android:id="@+id/Itemname2"
+        android:layout_width="190dp"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:paddingTop="5dp"/>
+
+</LinearLayout>
