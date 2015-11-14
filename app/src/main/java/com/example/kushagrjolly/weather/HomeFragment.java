@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
@@ -43,6 +45,9 @@ public class HomeFragment extends Fragment {
     private TextView summ;
     private TextView mint;
     private TextView maxt;
+    private RelativeLayout errorLayout;
+    private RelativeLayout noErrorLayout;
+    private ProgressBar imageProgress;
     private ListView listview;
     private ImageView weatherImage;
     private ArrayList<String> time;
@@ -59,9 +64,14 @@ public class HomeFragment extends Fragment {
         maxt = (TextView) rootView.findViewById(R.id.maxTemp);
         mint = (TextView) rootView.findViewById(R.id.minTemp);
         summ = (TextView) rootView.findViewById(R.id.summary);
+        imageProgress = (ProgressBar) rootView.findViewById(R.id.image_progress);
+        errorLayout = (RelativeLayout) rootView.findViewById(R.id.error_layout);
+        noErrorLayout = (RelativeLayout) rootView.findViewById(R.id.no_error_layout);
         time = new ArrayList<String>();
         max = new ArrayList<String>();
         icons = new ArrayList<String>();
+
+        weatherImage.setVisibility(View.GONE);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://api.forecast.io/forecast/397a20e0d8f404c0073a8db6108ccaf3")
@@ -95,7 +105,8 @@ public class HomeFragment extends Fragment {
                 forecast = getWeatherForecast(result);
                 WekaClassifier classifier = new WekaClassifier();
                 getWeatherIcon(weatherImage, classifier.wekaClassifier(forecast));
-
+                weatherImage.setVisibility(View.VISIBLE);
+                imageProgress.setVisibility(View.GONE);
             }
 
             @Override
@@ -134,8 +145,8 @@ public class HomeFragment extends Fragment {
                     max.add(String.valueOf(weatherResponse.getHourly().getData().get(i).getApparentTemperature()));
                     icons.add(weatherResponse.getHourly().getData().get(i).getIcon());
                 }
-                maxt.setText(String.valueOf(weatherResponse.getCurrently().getApparentTemperature()));
-                mint.setText(String.valueOf(weatherResponse.getCurrently().getTemperature()));
+                maxt.setText(String.valueOf(weatherResponse.getCurrently().getApparentTemperature()) + " °C");
+                mint.setText(String.valueOf(weatherResponse.getCurrently().getTemperature()) + " °C");
                 summ.setText(weatherResponse.getDaily().getData().get(0).getSummary());
                 summ.setVisibility(View.VISIBLE);
                 CustomListAdapter adapter = new CustomListAdapter(getActivity(), time, max, icons);
@@ -152,6 +163,8 @@ public class HomeFragment extends Fragment {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
+                errorLayout.setVisibility(View.VISIBLE);
+                noErrorLayout.setVisibility(View.GONE);
             }
         });
 

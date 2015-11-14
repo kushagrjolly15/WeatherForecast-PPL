@@ -55,7 +55,7 @@ public class CustomListAdapter extends BaseAdapter {
         ImageView weatherImage = (ImageView) view.findViewById(R.id.weather_image);
         getWeatherIcon(weatherImage, icons.get(position));
         time.setText(times.get(position));
-        max.setText(maxTemps.get(position));
+        max.setText(maxTemps.get(position) + " °C");
         return view;
 
     }

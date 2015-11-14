@@ -21,6 +21,7 @@ public class PredictionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.prediction_fragment, container, false);
         listView = (ListView)rootView. findViewById(R.id.listView);
+        listView.setDividerHeight(0);
         itemArrayAdapter = new ItemArrayAdapter(getActivity(), R.layout.item_layout);
 
         Parcelable state = listView.onSaveInstanceState();

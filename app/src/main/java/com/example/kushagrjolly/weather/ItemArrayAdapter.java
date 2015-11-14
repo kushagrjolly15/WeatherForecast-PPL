@@ -14,12 +14,6 @@ import java.util.List;
 public class ItemArrayAdapter extends ArrayAdapter<String[]> {
     private List<String[]> scoreList = new ArrayList<String[]>();
 
-    static class ItemViewHolder {
-        TextView day;
-        TextView max;
-        TextView min;
-    }
-
     public ItemArrayAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
@@ -58,8 +52,14 @@ public class ItemArrayAdapter extends ArrayAdapter<String[]> {
         }
         String[] stat = getItem(position);
         viewHolder.day.setText(stat[0]);
-        viewHolder.max.setText(stat[1]);
-        viewHolder.min.setText(stat[2]);
+        viewHolder.max.setText(stat[1] + " °C");
+        viewHolder.min.setText(stat[2] + " °C");
         return row;
+    }
+
+    static class ItemViewHolder {
+        TextView day;
+        TextView max;
+        TextView min;
     }
 }
