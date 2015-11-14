@@ -19,7 +19,7 @@ public class PredictionFragment extends Fragment {
     private ItemArrayAdapter itemArrayAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab_fragment_2, container, false) ;
+        View rootView = inflater.inflate(R.layout.prediction_fragment, container, false);
         listView = (ListView)rootView. findViewById(R.id.listView);
         itemArrayAdapter = new ItemArrayAdapter(getActivity(), R.layout.item_layout);
 

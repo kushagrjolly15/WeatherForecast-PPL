@@ -1,0 +1,152 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -U -M 2
+Relation:     weather-weka.filters.unsupervised.attribute.Remove-R1-4,9,12-13,17-24
+Instances:    3000
+Attributes:   12
+              cloudCover
+              dewPoint
+              humidity
+              icon
+              ozone
+              precipIntensity
+              precipProbability
+              precipType
+              pressure
+              visibility
+              windBearing
+              windSpeed
+Test mode:evaluate on training data
+
+=== Classifier model (full training set) ===
+
+J48 unpruned tree
+------------------
+
+visibility <= 2.05
+|   windSpeed <= 8.01: fog (2393.88/7.0)
+|   windSpeed > 8.01
+|   |   dewPoint <= 44.67
+|   |   |   dewPoint <= 43.53: fog (24.0/1.0)
+|   |   |   dewPoint > 43.53: wind (4.0)
+|   |   dewPoint > 44.67
+|   |   |   windBearing <= 93
+|   |   |   |   windBearing <= 91: fog (9.01)
+|   |   |   |   windBearing > 91: partly-cloudy-day (3.0/1.0)
+|   |   |   windBearing > 93: fog (112.96/1.85)
+visibility > 2.05
+|   cloudCover <= 0.22
+|   |   humidity <= 0.53
+|   |   |   humidity <= 0.49
+|   |   |   |   windSpeed <= 7.09: fog (49.0/1.0)
+|   |   |   |   windSpeed > 7.09
+|   |   |   |   |   windSpeed <= 7.33
+|   |   |   |   |   |   cloudCover <= 0.05: fog (2.0)
+|   |   |   |   |   |   cloudCover > 0.05: partly-cloudy-night (2.0)
+|   |   |   |   |   windSpeed > 7.33
+|   |   |   |   |   |   windBearing <= 292
+|   |   |   |   |   |   |   dewPoint <= 49.03: clear-day (2.0/1.0)
+|   |   |   |   |   |   |   dewPoint > 49.03
+|   |   |   |   |   |   |   |   pressure <= 1001.06: fog (4.5)
+|   |   |   |   |   |   |   |   pressure > 1001.06
+|   |   |   |   |   |   |   |   |   pressure <= 1007.05: clear-day (2.25/0.25)
+|   |   |   |   |   |   |   |   |   pressure > 1007.05: fog (2.25)
+|   |   |   |   |   |   windBearing > 292: fog (15.15/0.15)
+|   |   |   humidity > 0.49
+|   |   |   |   windSpeed <= 7.64
+|   |   |   |   |   visibility <= 2.37
+|   |   |   |   |   |   humidity <= 0.51
+|   |   |   |   |   |   |   windBearing <= 294: fog (3.0)
+|   |   |   |   |   |   |   windBearing > 294: clear-day (2.0)
+|   |   |   |   |   |   humidity > 0.51: fog (4.0)
+|   |   |   |   |   visibility > 2.37: clear-day (8.0/1.0)
+|   |   |   |   windSpeed > 7.64
+|   |   |   |   |   humidity <= 0.52: fog (3.0/1.0)
+|   |   |   |   |   humidity > 0.52: partly-cloudy-night (3.0)
+|   |   humidity > 0.53
+|   |   |   visibility <= 2.59: fog (72.0/2.0)
+|   |   |   visibility > 2.59
+|   |   |   |   dewPoint <= 69.19: partly-cloudy-day (2.0)
+|   |   |   |   dewPoint > 69.19: fog (2.0/1.0)
+|   cloudCover > 0.22
+|   |   visibility <= 2.3
+|   |   |   windSpeed <= 8.2
+|   |   |   |   windBearing <= 52
+|   |   |   |   |   windBearing <= 48: fog (7.0)
+|   |   |   |   |   windBearing > 48: partly-cloudy-night (2.0/1.0)
+|   |   |   |   windBearing > 52
+|   |   |   |   |   humidity <= 0.7
+|   |   |   |   |   |   dewPoint <= 67.68
+|   |   |   |   |   |   |   humidity <= 0.25: partly-cloudy-day (2.0)
+|   |   |   |   |   |   |   humidity > 0.25: fog (30.0)
+|   |   |   |   |   |   dewPoint > 67.68: fog (60.0/24.0)
+|   |   |   |   |   humidity > 0.7
+|   |   |   |   |   |   windBearing <= 87
+|   |   |   |   |   |   |   humidity <= 0.76: fog (2.0)
+|   |   |   |   |   |   |   humidity > 0.76: partly-cloudy-day (4.0/1.0)
+|   |   |   |   |   |   windBearing > 87: fog (39.0/1.0)
+|   |   |   windSpeed > 8.2
+|   |   |   |   windBearing <= 101: fog (13.0/3.0)
+|   |   |   |   windBearing > 101
+|   |   |   |   |   windBearing <= 269
+|   |   |   |   |   |   humidity <= 0.68
+|   |   |   |   |   |   |   windBearing <= 179: partly-cloudy-day (4.0)
+|   |   |   |   |   |   |   windBearing > 179: clear-day (3.0/1.0)
+|   |   |   |   |   |   humidity > 0.68: clear-day (3.0/1.0)
+|   |   |   |   |   windBearing > 269: fog (2.0/1.0)
+|   |   visibility > 2.3
+|   |   |   dewPoint <= 58.18
+|   |   |   |   cloudCover <= 0.44: fog (11.0/1.0)
+|   |   |   |   cloudCover > 0.44: clear-day (3.0/1.0)
+|   |   |   dewPoint > 58.18
+|   |   |   |   visibility <= 3.1
+|   |   |   |   |   visibility <= 2.49
+|   |   |   |   |   |   cloudCover <= 0.71
+|   |   |   |   |   |   |   windBearing <= 263: partly-cloudy-day (34.0/15.0)
+|   |   |   |   |   |   |   windBearing > 263
+|   |   |   |   |   |   |   |   dewPoint <= 75.84
+|   |   |   |   |   |   |   |   |   windSpeed <= 6.15: fog (8.0)
+|   |   |   |   |   |   |   |   |   windSpeed > 6.15: clear-day (3.0/1.0)
+|   |   |   |   |   |   |   |   dewPoint > 75.84: partly-cloudy-day (2.0)
+|   |   |   |   |   |   cloudCover > 0.71: partly-cloudy-day (5.0/1.0)
+|   |   |   |   |   visibility > 2.49: partly-cloudy-day (36.0/9.0)
+|   |   |   |   visibility > 3.1: fog (2.0/1.0)
+
+Number of Leaves  : 	45
+
+Size of the tree : 	89
+
+
+Time taken to build model: 0.03 seconds
+
+=== Evaluation on training set ===
+=== Summary ===
+
+Correctly Classified Instances        2920               97.3333 %
+Incorrectly Classified Instances        80                2.6667 %
+Kappa statistic                          0.6976
+Mean absolute error                      0.0151
+Root mean squared error                  0.0869
+Relative absolute error                 40.0951 %
+Root relative squared error             63.6343 %
+Total Number of Instances             3000
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.989     0.317      0.984     0.989     0.987      0.963    fog
+                 0.667     0          0.857     0.667     0.75       1        partly-cloudy-night
+                 0.69      0.002      0.769     0.69      0.727      0.976    clear-day
+                 0.333     0          1         0.333     0.5        0.885    wind
+                 0.684     0.009      0.707     0.684     0.695      0.978    partly-cloudy-day
+Weighted Avg.    0.973     0.302      0.973     0.973     0.972      0.964
+
+=== Confusion Matrix ===
+
+    a    b    c    d    e   <-- classified as
+ 2825    0    4    0   26 |    a = fog
+    3    6    0    0    0 |    b = partly-cloudy-night
+    7    1   20    0    1 |    c = clear-day
+    7    0    1    4    0 |    d = wind
+   29    0    1    0   65 |    e = partly-cloudy-day
+

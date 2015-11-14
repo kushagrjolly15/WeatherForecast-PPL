@@ -23,9 +23,16 @@ import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import retrofit.Callback;
+import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -41,6 +48,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> time;
     private ArrayList<String> max;
     private ArrayList<String> icons;
+    private Forecast forecast;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +62,47 @@ public class HomeFragment extends Fragment {
         time = new ArrayList<String>();
         max = new ArrayList<String>();
         icons = new ArrayList<String>();
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("https://api.forecast.io/forecast/397a20e0d8f404c0073a8db6108ccaf3")
+                .build();
+        restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);
+        ForecastApi forecastApi = restAdapter.create(ForecastApi.class);
+        forecastApi.getDistance(new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                BufferedReader reader = null;
+                StringBuilder sb = new StringBuilder();
+                try {
+
+                    reader = new BufferedReader(new InputStreamReader(response.getBody().in()));
+
+                    String line;
+
+                    try {
+                        while ((line = reader.readLine()) != null) {
+                            sb.append(line);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                String result = sb.toString();
+                forecast = getWeatherForecast(result);
+                WekaClassifier classifier = new WekaClassifier();
+                getWeatherIcon(weatherImage, classifier.wekaClassifier(forecast));
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("Retrofit_Error", error.getKind().toString());
+            }
+        });
 
         Request request = new Request();
 
@@ -70,9 +119,11 @@ public class HomeFragment extends Fragment {
         ImageView background = (ImageView) rootView.findViewById(R.id.background);
         background.setImageBitmap(blurredBackground);
         showProgressBar();
+
         weather.getWeather(request, new Callback<WeatherResponse>() {
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
+
                 for (int i = 0; i < weatherResponse.getHourly().getData().size() - 24; i++) {
                     long millis = weatherResponse.getHourly().getData().get(i).getTime();
                     long s = millis % 60;
@@ -86,7 +137,6 @@ public class HomeFragment extends Fragment {
                 maxt.setText(String.valueOf(weatherResponse.getCurrently().getApparentTemperature()));
                 mint.setText(String.valueOf(weatherResponse.getCurrently().getTemperature()));
                 summ.setText(weatherResponse.getDaily().getData().get(0).getSummary());
-                getWeatherIcon(weatherImage, weatherResponse.getCurrently().getIcon());
                 summ.setVisibility(View.VISIBLE);
                 CustomListAdapter adapter = new CustomListAdapter(getActivity(), time, max, icons);
                 listview.setAdapter(adapter);
@@ -127,6 +177,40 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    //convert weather response to usable data
+    private Forecast getWeatherForecast(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONObject currently = jsonObject.getJSONObject("currently");
+            Forecast forecast = new Forecast();
+            forecast.setPrecipIntensity(currently.getDouble("precipIntensity"));
+            forecast.setPrecipProbability(currently.getDouble("precipProbability"));
+            forecast.setDewPoint(currently.getDouble("dewPoint"));
+            forecast.setHumidity(currently.getDouble("humidity"));
+            forecast.setWindSpeed(currently.getDouble("windSpeed"));
+            forecast.setWindBearing(currently.getDouble("windBearing"));
+            if (response.contains("visibility")) {
+                forecast.setVisibility(currently.getDouble("visibility"));
+            } else {
+                forecast.setVisibility(0);
+            }
+            forecast.setCloudCover(currently.getDouble("cloudCover"));
+            forecast.setPressure(currently.getDouble("pressure"));
+            forecast.setOzone(currently.getDouble("ozone"));
+            forecast.setIcon(currently.getString("icon"));
+            if (currently.toString().contains("precipType")) {
+                String precipType = currently.getString("precipType");
+                forecast.setPrecipType(precipType);
+            } else {
+                forecast.setPrecipType("");
+            }
+            return forecast;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void getWeatherIcon(ImageView image, String iconType) {
         if (iconType.equalsIgnoreCase("clear-day") || iconType.equalsIgnoreCase("clear-night")) {
             image.setImageResource(R.drawable.weather_condition_sunny);
@@ -140,18 +224,11 @@ public class HomeFragment extends Fragment {
             image.setImageResource(R.drawable.weather_condition_fog);
         } else if (iconType.equalsIgnoreCase("cloudy")) {
             image.setImageResource(R.drawable.weather_condition_cloudy);
-        } else if (iconType.equalsIgnoreCase("partly-cloudy-day") || iconType.equalsIgnoreCase("partly-cloudy-night")) {
+        } else if (iconType.equalsIgnoreCase("partly-cloudy-day") || iconType.equalsIgnoreCase("partly-cloudy-night") || iconType.equalsIgnoreCase("partly-cloudy")) {
             image.setImageResource(R.drawable.weather_condition_partly_cloudy);
         } else {
             image.setImageResource(R.drawable.weather_condition_sunny);
         }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-
-        super.onActivityCreated(savedInstanceState);
-
     }
 
     public static class BlurBuilder {
@@ -180,4 +257,6 @@ public class HomeFragment extends Fragment {
             return outputBitmap;
         }
     }
+
+
 }
