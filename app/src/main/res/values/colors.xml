@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_tint">#3b4776b9</color>
+    <color name="ok_dialog_button">#2DBB71</color>
+    <color name="collection_tint">#64000000</color>
+    <color name="white_tint">#AAFFFFFF</color>
+    <color name="white_tint_dark">#EEFFFFFF</color>
+    <color name="status_bar_color">#C6646C</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="app_base_color">#F86960</color>
+    <color name="app_base_color_light">#90F86960</color>
+    <color name="transparent">#00000000</color>
+    <color name="tint_trending">#45131313</color>
+    <color name="tint_trending_dark">#98000000</color>
+    <color name="grey">#D3D3D3</color>
+    <color name="green">#1C6011</color>
+    <color name="blue">#41B896</color>
+    <color name="dark_tint">#BB000000</color>
+    <color name="image_tint">#35000000</color>
+    <color name="medium_tint">#66000000</color>
+    <color name="expandable_text">#666666</color>
+    <color name="dark_grey">#3D3C3A</color>
+    <color name="dull_grey">#c0c0c0</color>
+    <color name="nearby_fragment_destination">#40547E</color>
+    <color name="on_select">#F86960</color>
+    <color name="on_deselect">#F4F4F4</color>
+    <color name="on_deselect_text_color">#41B896</color>
+    <color name="rating">#9ACC2B</color>
+    <color name="orange_varient1">#EA9F27</color>
+    <color name="orange_varient2">#FBBF4A</color>
+    <color name="orange_varient3">#FDE2B4</color>
+    <color name="black_varient1">#1C1C1C</color>
+    <color name="black_varient2">#3A3A3A</color>
+    <color name="black_varient3">#515050</color>
+    <color name="black_varient4">#353535</color>
+    <color name="black_varient5">#262626</color>
+    <color name="grey_varient1">#AAAAAA</color>
+    <color name="light_grey">#D1D0CE</color>
+    <color name="silver">#BCC6CC</color>
+    <color name="platinum">#E5E4E2</color>
+    <color name="grey_varient2">#F0F1F2</color>
+    <color name="grey_varient3">#A1A1A1</color>
+    <color name="grey_varient4">#A7A7A7</color>
+    <color name="grey_varient5">#8D8D8D</color>
+    <color name="grey_varient6">#585858</color>
+    <color name="grey_varient7">#979797</color>
+    <color name="grey_varient8">#EBEBEB</color>
+    <color name="grey_varient9">#F7FAFB</color>
+    <color name="grey_varient10">#9FA2A4</color>
+    <color name="grey_varient11">#E0E0E0</color>
+    <color name="grey_varient12">#F0F1F2</color>
+    <color name="light_green">#88C057</color>
+
+    <color name="filter_fab_bg">#E74C3C</color>
+    <color name="filter_seekbar_fill">#22C064</color>
+    <color name="filter_seekbar_bg">#CCCCCC</color>
+
+    <color name="red_tint">#ff3232</color>
+    <color name="cuisines_bg_grey">#F0F1F2</color>
+
+
+    <color name="rating_excellent">#247c2a</color>
+    <color name="rating_good">#9acc2b</color>
+    <color name="rating_average">#d7ca23</color>
+    <color name="rating_poor">#e8993a</color>
+    <color name="rating_pathetic">#b71c1c</color>
+
+    <color name="nearby_item_bg_2">#FBFAF8</color>
+
+    <!-- color for SlidingTabStrip -->
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <!-- color for SlidingTabStrip -->
+
+    <color name="grey_varient13">#C1C1C1</color>
+    <color name="black_varient6">#00130F</color>
+    <color name="green_varient1">#22C064</color>
+    <color name="grey_varient14">#919293</color>
+</resources>

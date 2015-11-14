@@ -20,7 +20,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 HomeFragment tab1 = new HomeFragment();
                 return tab1;
             case 1:
-                TabFragment2 tab2 = new TabFragment2();
+                PredictionFragment tab2 = new PredictionFragment();
                 return tab2;
             default:
                 return null;

@@ -1,12 +1,9 @@
 package com.example.kushagrjolly.weather;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import android.support.v7.widget.Toolbar;
 
 
@@ -21,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Daily"));
-        tabLayout.addTab(tabLayout.newTab().setText("Weekly"));
+        tabLayout.addTab(tabLayout.newTab().setText("Predictions"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);

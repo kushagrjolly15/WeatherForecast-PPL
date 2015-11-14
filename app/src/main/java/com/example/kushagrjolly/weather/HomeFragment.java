@@ -2,7 +2,13 @@ package com.example.kushagrjolly.weather;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -32,6 +38,9 @@ public class HomeFragment extends Fragment {
     private TextView maxt;
     private ListView listview;
     private ImageView weatherImage;
+    private ArrayList<String> time;
+    private ArrayList<String> max;
+    private ArrayList<String> icons;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,15 +51,24 @@ public class HomeFragment extends Fragment {
         maxt = (TextView) rootView.findViewById(R.id.maxTemp);
         mint = (TextView) rootView.findViewById(R.id.minTemp);
         summ = (TextView) rootView.findViewById(R.id.summary);
-        final ArrayList<String> time = new ArrayList<String>();
-        final ArrayList<String> max = new ArrayList<String>();
+        time = new ArrayList<String>();
+        max = new ArrayList<String>();
+        icons = new ArrayList<String>();
+
         Request request = new Request();
+
+        //coordinates of Delhi
         request.setLat("26.61");
         request.setLng("77.23");
+
         request.setUnits(Request.Units.AUTO);
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.CURRENTLY);
         request.removeExcludeBlock(Request.Block.CURRENTLY);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.redfort);
+        Bitmap blurredBackground = BlurBuilder.blur(getActivity(), icon);
+        ImageView background = (ImageView) rootView.findViewById(R.id.background);
+        background.setImageBitmap(blurredBackground);
         showProgressBar();
         weather.getWeather(request, new Callback<WeatherResponse>() {
             @Override
@@ -63,13 +81,14 @@ public class HomeFragment extends Fragment {
                     String hms = String.format("%d:%02d:%02d", h, m, s);
                     time.add(hms);
                     max.add(String.valueOf(weatherResponse.getHourly().getData().get(i).getApparentTemperature()));
+                    icons.add(weatherResponse.getHourly().getData().get(i).getIcon());
                 }
-                maxt.setText(String.valueOf(weatherResponse.getDaily().getData().get(0).getTemperatureMax()));
-                mint.setText(String.valueOf(weatherResponse.getDaily().getData().get(0).getTemperatureMin()));
+                maxt.setText(String.valueOf(weatherResponse.getCurrently().getApparentTemperature()));
+                mint.setText(String.valueOf(weatherResponse.getCurrently().getTemperature()));
                 summ.setText(weatherResponse.getDaily().getData().get(0).getSummary());
                 getWeatherIcon(weatherImage, weatherResponse.getCurrently().getIcon());
                 summ.setVisibility(View.VISIBLE);
-                CustomListAdapter adapter=new CustomListAdapter(getActivity(), time,max);
+                CustomListAdapter adapter = new CustomListAdapter(getActivity(), time, max, icons);
                 listview.setAdapter(adapter);
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
@@ -80,8 +99,6 @@ public class HomeFragment extends Fragment {
             public void failure(RetrofitError retrofitError) {
                 Log.d(TAG, "Error while calling: " + retrofitError.getUrl());
                 Log.d(TAG, retrofitError.toString());
-                CustomListAdapter adapter=new CustomListAdapter(getActivity(), time,max);
-                listview.setAdapter(adapter);
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -135,7 +152,32 @@ public class HomeFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
+    }
 
+    public static class BlurBuilder {
+        private static final float BITMAP_SCALE = 0.4f;
+        private static final float BLUR_RADIUS = 1.5f;
 
+        public static Bitmap blur(Context context, Bitmap image) {
+            int width = Math.round(image.getWidth() * BITMAP_SCALE);
+            int height = Math.round(image.getHeight() * BITMAP_SCALE);
+
+            Bitmap inputBitmap = Bitmap.createScaledBitmap(image, width, height, false);
+            Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+
+            RenderScript rs = RenderScript.create(context);
+            //class used to blur
+            ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+            //creates input memory allocation in renderscript kernel
+            Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+            //creates output memory allocation from renderscript kernel
+            Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+            theIntrinsic.setRadius(BLUR_RADIUS);
+            theIntrinsic.setInput(tmpIn);
+            theIntrinsic.forEach(tmpOut);
+            tmpOut.copyTo(outputBitmap);
+
+            return outputBitmap;
+        }
     }
 }

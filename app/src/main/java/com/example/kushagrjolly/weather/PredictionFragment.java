@@ -1,8 +1,8 @@
 package com.example.kushagrjolly.weather;
+
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class TabFragment2 extends Fragment {
+public class PredictionFragment extends Fragment {
     private ListView listView;
     private ItemArrayAdapter itemArrayAdapter;
     @Override
