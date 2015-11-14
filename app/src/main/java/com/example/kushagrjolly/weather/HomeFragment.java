@@ -1,13 +1,15 @@
 package com.example.kushagrjolly.weather;
 
-import android.app.ListFragment;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,26 +18,32 @@ import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class TabFragment1 extends Fragment {
+public class HomeFragment extends Fragment {
     private static final String TAG = "MainActivity";
+    public ProgressDialog progressDialog;
+    FragmentActivity activity;
+    private TextView summ;
+    private TextView mint;
+    private TextView maxt;
+    private ListView listview;
+    private ImageView weatherImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab_fragment_1, container, false) ;
+        View rootView = inflater.inflate(R.layout.home_fragment, container, false);
         final RequestBuilder weather = new RequestBuilder();
-        final ListView listview = (ListView)rootView.findViewById(R.id.listview);
-        final TextView maxt= (TextView) rootView.findViewById(R.id.textView);
-        final TextView mint= (TextView) rootView.findViewById(R.id.textView1);
-        final TextView summ= (TextView) rootView.findViewById(R.id.textView2);
+        listview = (ListView) rootView.findViewById(R.id.listview);
+        weatherImage = (ImageView) rootView.findViewById(R.id.weather_image);
+        maxt = (TextView) rootView.findViewById(R.id.maxTemp);
+        mint = (TextView) rootView.findViewById(R.id.minTemp);
+        summ = (TextView) rootView.findViewById(R.id.summary);
         final ArrayList<String> time = new ArrayList<String>();
         final ArrayList<String> max = new ArrayList<String>();
-        final ArrayList<String> min = new ArrayList<String>();
         Request request = new Request();
         request.setLat("26.61");
         request.setLng("77.23");
@@ -43,7 +51,7 @@ public class TabFragment1 extends Fragment {
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.CURRENTLY);
         request.removeExcludeBlock(Request.Block.CURRENTLY);
-
+        showProgressBar();
         weather.getWeather(request, new Callback<WeatherResponse>() {
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
@@ -59,9 +67,13 @@ public class TabFragment1 extends Fragment {
                 maxt.setText(String.valueOf(weatherResponse.getDaily().getData().get(0).getTemperatureMax()));
                 mint.setText(String.valueOf(weatherResponse.getDaily().getData().get(0).getTemperatureMin()));
                 summ.setText(weatherResponse.getDaily().getData().get(0).getSummary());
+                getWeatherIcon(weatherImage, weatherResponse.getCurrently().getIcon());
                 summ.setVisibility(View.VISIBLE);
                 CustomListAdapter adapter=new CustomListAdapter(getActivity(), time,max);
                 listview.setAdapter(adapter);
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
 
             @Override
@@ -70,6 +82,9 @@ public class TabFragment1 extends Fragment {
                 Log.d(TAG, retrofitError.toString());
                 CustomListAdapter adapter=new CustomListAdapter(getActivity(), time,max);
                 listview.setAdapter(adapter);
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
         });
 
@@ -78,6 +93,43 @@ public class TabFragment1 extends Fragment {
         return rootView;
 
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = getActivity();
+    }
+
+    public void showProgressBar() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setMessage("Please Wait");
+            progressDialog.show();
+        } else if (!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+    }
+
+    private void getWeatherIcon(ImageView image, String iconType) {
+        if (iconType.equalsIgnoreCase("clear-day") || iconType.equalsIgnoreCase("clear-night")) {
+            image.setImageResource(R.drawable.weather_condition_sunny);
+        } else if (iconType.equalsIgnoreCase("rain") || iconType.equalsIgnoreCase("sleet")) {
+            image.setImageResource(R.drawable.weather_condition_rain);
+        } else if (iconType.equalsIgnoreCase("snow")) {
+            image.setImageResource(R.drawable.weather_condition_snow);
+        } else if (iconType.equalsIgnoreCase("wind")) {
+            image.setImageResource(R.drawable.weather_condition_windy);
+        } else if (iconType.equalsIgnoreCase("fog")) {
+            image.setImageResource(R.drawable.weather_condition_fog);
+        } else if (iconType.equalsIgnoreCase("cloudy")) {
+            image.setImageResource(R.drawable.weather_condition_cloudy);
+        } else if (iconType.equalsIgnoreCase("partly-cloudy-day") || iconType.equalsIgnoreCase("partly-cloudy-night")) {
+            image.setImageResource(R.drawable.weather_condition_partly_cloudy);
+        } else {
+            image.setImageResource(R.drawable.weather_condition_sunny);
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
