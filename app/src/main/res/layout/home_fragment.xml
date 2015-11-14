@@ -43,7 +43,8 @@
             <RelativeLayout
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/weather_image"
@@ -55,8 +56,9 @@
 
                 <ProgressBar
                     android:id="@+id/image_progress"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_centerInParent="true"
                     android:indeterminate="true"/>
 
             </RelativeLayout>
